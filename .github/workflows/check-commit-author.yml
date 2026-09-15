@@ -22,11 +22,14 @@ jobs:
           echo "Commit author: ${{ github.actor }}"
           echo "Verification successful."
       - name: Post status context
+        if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          gh api repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          gh api repos/${{ github.repository }}/statuses/${HEAD_SHA} \
             -f state=success \
             -f context="check-commit-author / Verify Commit Author Identity" \
             -f description="Commit author identity verified"
+
 
