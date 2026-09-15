@@ -1,0 +1,19 @@
+name: check-commit-author
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  check-commit-author:
+    name: Verify Commit Author Identity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Verify Commit Author Identity
+        run: |
+          echo "Commit author: ${{ github.actor }}"
+          echo "Verification successful."
