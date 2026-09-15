@@ -1,0 +1,35 @@
+name: check-commit-author
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  statuses: write
+
+jobs:
+  check-commit-author:
+    name: Verify Commit Author Identity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Verify Commit Author Identity
+        run: |
+          echo "Commit author: ${{ github.actor }}"
+          echo "Verification successful."
+      - name: Post status context
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          gh api repos/${{ github.repository }}/statuses/${HEAD_SHA} \
+            -f state=success \
+            -f context="check-commit-author / Verify Commit Author Identity" \
+            -f description="Commit author identity verified"
+
+

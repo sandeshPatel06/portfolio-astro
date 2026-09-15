@@ -2,3 +2,8 @@ node_modules/
 .dist/
 dist/
 .astro/
+__pycache__/
+venv/
+.env
+.DS_Store
+.vscode/
